@@ -3,11 +3,11 @@ from fastapi import FastAPI
 app = FastAPI()
 
 
-@app.get("/")
+@app.get("/", tags=['ROOT'])
 async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/hello/{name}")
+@app.get("/hello/{name}", tags=['HELLO'])
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
