@@ -1,10 +1,27 @@
 from fastapi import FastAPI
 from EventStore.event_store import DatetimeEventStore
+from fastapi.middleware.cors import CORSMiddleware
 from .config import JSON_PATH
 import json
-import os
 
 app = FastAPI()
+
+origins = [
+    "http://localhost",
+    "https://localhost",
+    "http://localhost:8000",
+    "https://localhost:8000",
+    "http://localhost:3000",
+    "https://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 with open(JSON_PATH, 'r') as json_read:
     event_store = DatetimeEventStore(json.load(json_read))
@@ -46,7 +63,7 @@ async def update_events(id:int, body: dict):
 
 @app.delete("/events/{id}", tags=['EVENTS'])
 async def delete_event(id: int):
-    event_store.delete_event([event_store.events[id]])
+    event_store.delete_event_by_id(id)
     commit()
     return {"data": f"events with id {id} has been deleted"}
 
