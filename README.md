@@ -32,5 +32,6 @@ python manage.py runserver
 
 ```
 cd DateEventReactApp
+npm install
 npm start
 ```
